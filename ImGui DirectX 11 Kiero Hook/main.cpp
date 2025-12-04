@@ -3,6 +3,7 @@
 #include <complex>
 #include<Menu/Menu.h>
 #include <Aimbot/Aimbot.h>
+#include<Memory/Memory.h>
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 int DATA::windowWidth;
 int DATA::windowHeight;
@@ -91,6 +92,16 @@ DWORD WINAPI MainThread(LPVOID lpReserved)
 	} while (!init_hook);
 	return TRUE;
 }
+void InitConsole()
+{
+	AllocConsole();
+	FILE* f;
+	freopen_s(&f, "CONOUT$", "w", stdout);
+	freopen_s(&f, "CONIN$", "r", stdin);
+
+	SetConsoleTitleA("VH DEV - Debug Console");
+
+}
 
 BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 {
@@ -98,8 +109,10 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 	{
 	case DLL_PROCESS_ATTACH:
 		DisableThreadLibraryCalls(hMod);
+		InitConsole(); // for debug
 		CreateThread(nullptr, 0, InitMatrix, hMod, 0, nullptr);
 		CreateThread(nullptr, 0, AimbotMain, hMod, 0, nullptr);
+		CreateThread(nullptr, 0, EntryMemory, hMod, 0, nullptr);
 		CreateThread(nullptr, 0, MainThread, hMod, 0, nullptr);
 		break;
 	case DLL_PROCESS_DETACH:

@@ -27,4 +27,8 @@ namespace Setting
         extern int VKKey;
         extern int AimbotIn;
     }
+    namespace Memory
+    {
+        extern bool JumpEvent;
+    }
 }

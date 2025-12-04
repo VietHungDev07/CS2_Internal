@@ -233,6 +233,15 @@ void RenderMenu()
 
             ImGui::EndTabItem();
         }
+        if (ImGui::BeginTabItem("Memory"))
+        {
+            
+            ImGui::Spacing();
+            SeparatorText("Memory Settings");
+
+            ImGui::Checkbox("Bunny Hope[SPACE]", &Setting::Memory::JumpEvent);
+            ImGui::EndTabItem();
+        }
 
         ImGui::EndTabBar();
     }

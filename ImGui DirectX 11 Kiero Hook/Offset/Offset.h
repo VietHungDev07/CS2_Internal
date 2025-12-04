@@ -15,4 +15,7 @@ namespace Offset
 	inline std::uintptr_t m_hPlayerPawn = 2300;
 	inline std::uintptr_t m_iTeamNum = 1003;
 	inline std::uintptr_t m_vecLastClipCameraPos = 0x3DC4;
+	inline std::uintptr_t FlagJump = 0x1EDC; //Manually to find [44 8b 87 ? ? ? ? 80 fa]: (rdi+?) - CSPlayerPawn
+//Button.hpp
+	inline std::uintptr_t jump = 0x1BE68B0;
 }

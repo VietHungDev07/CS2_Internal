@@ -160,6 +160,7 @@
     <ClCompile Include="kiero\minhook\src\hook.c" />
     <ClCompile Include="kiero\minhook\src\trampoline.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Memory\Memory.cpp" />
     <ClCompile Include="Menu\Menu.cpp" />
     <ClCompile Include="SDK\SDK.cpp" />
     <ClCompile Include="Setting\Setting.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="kiero\minhook\src\hde\table32.h" />
     <ClInclude Include="kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="kiero\minhook\src\trampoline.h" />
+    <ClInclude Include="Memory\Memory.h" />
     <ClInclude Include="Menu\Menu.h" />
     <ClInclude Include="Offset\Offset.h" />
     <ClInclude Include="SDK\SDK.h" />

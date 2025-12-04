@@ -37,6 +37,9 @@
     <Filter Include="Aimbot">
       <UniqueIdentifier>{9fdba8c0-e370-4edb-aa37-e797222c569e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{bec7f31a-d29e-4e54-af98-18d7b54cd83f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kiero\minhook\src\buffer.c">
@@ -92,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="Aimbot\Aimbot.cpp">
       <Filter>Aimbot</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory\Memory.cpp">
+      <Filter>Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -171,6 +177,9 @@
     </ClInclude>
     <ClInclude Include="Aimbot\Aimbot.h">
       <Filter>Aimbot</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory\Memory.h">
+      <Filter>Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

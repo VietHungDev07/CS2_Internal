@@ -25,4 +25,8 @@ namespace Setting
         int AimbotIn;//6 = head , 5 = neck , 0 = pelvis
 
     }
+    namespace Memory
+    {
+        bool JumpEvent = false;
+    }
 }
