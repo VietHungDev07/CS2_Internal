@@ -6,6 +6,7 @@
 #include <numbers>
 #include <cmath>
 #include <vector>
+#include <map>
 struct view_matrix_t 
 {
 	float* operator[ ](int index) {
@@ -14,9 +15,14 @@ struct view_matrix_t
 
 	float matrix[4][4]; // 0x00
 };
-extern view_matrix_t ViewMatrix;
-extern int windowWidth;
-extern int windowHeight;
+
+namespace DATA
+{
+	extern view_matrix_t ViewMatrix;
+	extern int windowWidth;
+	extern int windowHeight;
+	extern std::vector<std::pair<int, int>> BoneMap;
+}
 struct Vector3
 {
 	// constructor
@@ -108,6 +114,9 @@ namespace Camera
 {
 	view_matrix_t GetViewMatrix(LPCSTR namemodule);
 	Vector3 WorldToScreen(Vector3* v);
+	uintptr_t GetYViewAngles(LPCSTR namemodule);
+	uintptr_t GetXViewAngles(LPCSTR namemodule);
+	Vector3 GetLastClipCameraPos(uintptr_t Pawn);
 }
 
 
@@ -116,7 +125,8 @@ namespace UPlayer
 	int GetTeamID(uintptr_t Pawn);
 	Vector3 GetLocaltion(uintptr_t Pawn);
 	int GetHealth(uintptr_t Pawn);
-	int GetArmor(uintptr_t Pawn);
+	uintptr_t GetBoneArray(uintptr_t Pawn);
+	Vector3 GetPostionBone(uintptr_t Pawn, int BoneIndex);
 }
 namespace Entity
 {

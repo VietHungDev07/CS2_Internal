@@ -1,4 +1,4 @@
-#include <Offset/Offset.h>
+﻿#include <Offset/Offset.h>
 #include <string>
 #include <SDK.h>
 #include <vector>
@@ -8,6 +8,36 @@ using namespace std;
 namespace DATA
 {
     view_matrix_t ViewMatrix{};
+    std::vector<std::pair<int, int>> BoneMap =
+    {
+        // Head
+        {6, 5},   // head -> neck
+        {5, 4},   // neck -> upper spine
+        {4, 2},   // upper spine -> mid spine
+        {2, 0},   // mid spine -> pelvis
+
+        // Shoulders
+        {4, 8},   // spine -> left shoulder
+        {4, 13},  // spine -> right shoulder
+
+        // Left arm
+        {8, 9},   // arm_upper_L -> arm_lower_L
+        {9, 10},  // arm_lower_L -> hand_L
+
+        // Right arm
+        {13, 14}, // arm_upper_R -> arm_lower_R
+        {14, 15}, // arm_lower_R -> hand_R
+
+        // Legs 
+        {0, 22},  // pelvis -> leg_upper_L
+        {22, 23}, // leg_upper_L -> leg_lower_L
+        {23, 24}, // leg_lower_L -> ankle_L
+
+        {0, 25},  // pelvis -> leg_upper_R
+        {25, 26}, // leg_upper_R -> leg_lower_R
+        {26, 27}  // leg_lower_R -> ankle_R
+    };
+
 }
 
 namespace Module
@@ -61,13 +91,36 @@ namespace Camera
         _x *= inv_w;
         _y *= inv_w;
 
-        float x = windowWidth * .5f;
-        float y = windowHeight * .5f;
+        float x = DATA::windowWidth * .5f;
+        float y = DATA::windowHeight * .5f;
 
-        x += 0.5f * _x * windowWidth + 0.5f;
-        y -= 0.5f * _y * windowHeight + 0.5f;
+        x += 0.5f * _x * DATA::windowWidth + 0.5f;
+        y -= 0.5f * _y * DATA::windowHeight + 0.5f;
 
         return { x, y, w };
+    }
+
+    uintptr_t GetYViewAngles(LPCSTR namemodule)
+    {
+        uintptr_t base = Module::GetBase(namemodule);
+        if (!base) return 0.0f;
+
+        return base + Offset::dwViewAngles + 0x0;
+
+    }
+    uintptr_t GetXViewAngles(LPCSTR namemodule)
+    {
+        uintptr_t base = Module::GetBase(namemodule);
+        if (!base) return 0;
+
+        return base + Offset::dwViewAngles + 0x4;
+
+    }
+    Vector3 GetLastClipCameraPos(uintptr_t Pawn)
+    {
+        Vector3 LastClipCameraPos;
+        SafeRead::Read(Pawn + Offset::m_vecLastClipCameraPos, LastClipCameraPos);
+        return LastClipCameraPos;
     }
 
 }
@@ -95,12 +148,23 @@ namespace UPlayer
         return hp;
     }
 
-    int GetArmor(uintptr_t Pawn)
+
+    uintptr_t GetBoneArray(uintptr_t Pawn)
     {
-        int armor = 0;
-        SafeRead::Read(Pawn + Offset::m_ArmorValue, armor);
-        return armor;
+        uintptr_t gameSceneNode;
+        SafeRead::Read(Pawn + Offset::m_pGameSceneNode, gameSceneNode);
+        uintptr_t boneArray;
+        SafeRead::Read(gameSceneNode + 0x210, boneArray);
+        return boneArray;
     }
+
+    Vector3 GetPostionBone(uintptr_t Pawn, int BoneIndex)
+    {
+        Vector3 bonePosition;
+        SafeRead::Read(GetBoneArray(Pawn) + BoneIndex * 32, bonePosition);
+        return bonePosition;
+    }
+
 }
 
 namespace Entity

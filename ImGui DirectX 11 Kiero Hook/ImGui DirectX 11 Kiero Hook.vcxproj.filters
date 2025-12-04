@@ -25,6 +25,18 @@
     <Filter Include="SDK">
       <UniqueIdentifier>{b3ac1b21-1495-4583-9329-cfca1791bfa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{7beb77d4-ef41-4b0b-ae94-e702f154bab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{06a67ca6-6d22-48e5-8b7e-44a9bdb1c20b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Setting">
+      <UniqueIdentifier>{6280e036-c1ab-491f-8445-7797f4e2b825}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Aimbot">
+      <UniqueIdentifier>{9fdba8c0-e370-4edb-aa37-e797222c569e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="kiero\minhook\src\buffer.c">
@@ -66,8 +78,20 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="SDK.cpp">
+    <ClCompile Include="SDK\SDK.cpp">
       <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Draw\Draw.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu\Menu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Setting\Setting.cpp">
+      <Filter>Setting</Filter>
+    </ClCompile>
+    <ClCompile Include="Aimbot\Aimbot.cpp">
+      <Filter>Aimbot</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +159,18 @@
     </ClInclude>
     <ClInclude Include="SDK\SDK.h">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Draw\Draw.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu\Menu.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Setting\Setting.h">
+      <Filter>Setting</Filter>
+    </ClInclude>
+    <ClInclude Include="Aimbot\Aimbot.h">
+      <Filter>Aimbot</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -145,6 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Aimbot\Aimbot.cpp" />
+    <ClCompile Include="Draw\Draw.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -158,7 +160,9 @@
     <ClCompile Include="kiero\minhook\src\hook.c" />
     <ClCompile Include="kiero\minhook\src\trampoline.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SDK.cpp" />
+    <ClCompile Include="Menu\Menu.cpp" />
+    <ClCompile Include="SDK\SDK.cpp" />
+    <ClCompile Include="Setting\Setting.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="kiero\minhook\dll_resources\MinHook.def" />
@@ -167,6 +171,8 @@
     <ResourceCompile Include="kiero\minhook\dll_resources\MinHook.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Aimbot\Aimbot.h" />
+    <ClInclude Include="Draw\Draw.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />
@@ -185,8 +191,10 @@
     <ClInclude Include="kiero\minhook\src\hde\table32.h" />
     <ClInclude Include="kiero\minhook\src\hde\table64.h" />
     <ClInclude Include="kiero\minhook\src\trampoline.h" />
+    <ClInclude Include="Menu\Menu.h" />
     <ClInclude Include="Offset\Offset.h" />
     <ClInclude Include="SDK\SDK.h" />
+    <ClInclude Include="Setting\Setting.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
