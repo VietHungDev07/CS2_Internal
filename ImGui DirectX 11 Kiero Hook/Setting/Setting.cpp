@@ -11,6 +11,8 @@ namespace Setting
         bool DoanVanSang = false;
         bool Distance = false;
         bool SnapLine = false;
+        bool TeamCheck = true;
+        bool Name = true;
         ImColor SkeletonColor = ImColor(255, 0, 0, 255);
 
         float SkeletonThickness = 1.5f;
@@ -29,5 +31,6 @@ namespace Setting
     namespace Memory
     {
         bool JumpEvent = false;
+        bool Glow = true;
     }
 }

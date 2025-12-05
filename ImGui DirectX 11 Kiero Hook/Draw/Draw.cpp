@@ -1,5 +1,6 @@
 ﻿#include <Draw/Draw.h>
 #include<Setting/Setting.h>
+#include <Offset/Offset.h>
 void DrawHealthBar(uintptr_t Pawn)
 {
     int Health = UPlayer::GetHealth(Pawn);
@@ -235,6 +236,9 @@ void DrawDistance(uintptr_t Pawn)
     );
 }
 
+
+
+
 void EntryDrawEntity()
 {
     if (!Setting::ESP::ESP) return;
@@ -252,21 +256,24 @@ void EntryDrawEntity()
 
     for (auto& ent : entityList)
     {
+
+
         if (!ent) continue;
 
         uintptr_t pawn = Entity::GetpCSPlayerPawn("client.dll", ent);
         if (!pawn) continue;
 
+        if (Setting::ESP::TeamCheck) {
+
+            int team = UPlayer::GetTeamID(pawn);
+            if (team == localTeam) continue;
+        }
 
         if (pawn == localPawn) continue;
 
         int health = UPlayer::GetHealth(pawn);
         if (health <= 0 || health > 200) continue;
 
-
-         int team = UPlayer::GetTeamID(pawn);
-         if (team == localTeam) continue;
-        
 
         Vector3 rootPos = UPlayer::GetLocaltion(pawn);
         Vector3 screenPos = Camera::WorldToScreen(&rootPos);
@@ -298,6 +305,9 @@ void EntryDrawEntity()
         {
             DrawDistance(pawn);
         }
+      
+   
+       
 
 
         if (Setting::ESP::SnapLine)

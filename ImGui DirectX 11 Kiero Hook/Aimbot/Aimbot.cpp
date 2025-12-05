@@ -50,7 +50,10 @@ DWORD WINAPI AimbotMain(LPVOID)
             if (!pawn || pawn == localPawn) continue;
 
             if (UPlayer::GetHealth(pawn) <= 0) continue;
-            if (UPlayer::GetTeamID(pawn) == localTeam) continue;
+            if (Setting::ESP::TeamCheck) {
+
+                if (UPlayer::GetTeamID(pawn) == localTeam) continue;
+            }
 
             Vector3 worldBone = UPlayer::GetPostionBone(pawn, Setting::Aimbot::AimbotIn);
 

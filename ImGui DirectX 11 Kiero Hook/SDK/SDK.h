@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #ifndef _VECTOR_ESP_
 #define _VECTOR_ESP_
 #include<Windows.h>
@@ -7,6 +7,7 @@
 #include <cmath>
 #include <vector>
 #include <map>
+#include "string"
 struct view_matrix_t 
 {
 	float* operator[ ](int index) {
@@ -127,7 +128,9 @@ namespace UPlayer
 	int GetHealth(uintptr_t Pawn);
 	uintptr_t GetBoneArray(uintptr_t Pawn);
 	Vector3 GetPostionBone(uintptr_t Pawn, int BoneIndex);
+	std::string GetPlayerName(uintptr_t Pawn);
 }
+
 namespace Entity
 {
 	uintptr_t GetLocalPlayer(LPCSTR namemodule);

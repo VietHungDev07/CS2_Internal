@@ -12,12 +12,15 @@ namespace Setting
         extern bool DoanVanSang;
         extern bool Distance;
         extern bool SnapLine;
+        extern bool TeamCheck;
+        extern bool Name;
         extern ImColor SkeletonColor;
         extern float SkeletonThickness;
         extern ImColor BoxColor;
         extern float BoxThickness;
         extern bool BoxFilled;
         extern int BoxStyle;
+
         extern ImColor SnapLineColor;
     }
     namespace Aimbot
@@ -30,5 +33,7 @@ namespace Setting
     namespace Memory
     {
         extern bool JumpEvent;
+        extern bool Glow;
+
     }
 }

@@ -149,12 +149,14 @@ void RenderMenu()
 
             ImGui::Spacing();
             SeparatorText("ESP Settings");
-
+          
             ImGui::Checkbox("Box", &Setting::ESP::BOX);
+            ImGui::Checkbox("TeamCheck", &Setting::ESP::TeamCheck);
             ImGui::Checkbox("Health Bar", &Setting::ESP::HealthBar);
             ImGui::Checkbox("Skeleton", &Setting::ESP::Skeleton);
             ImGui::Checkbox("Distance", &Setting::ESP::Distance);
             ImGui::Checkbox("SnapLine", &Setting::ESP::SnapLine);
+      
 
             ImGui::SameLine();
             ImGui::ColorEdit4("##SnapColor", (float*)&Setting::ESP::SnapLineColor,
@@ -254,6 +256,7 @@ void RenderMenu()
             SeparatorText("Memory Settings");
 
             ImGui::Checkbox("Bunny Hop [SPACE]", &Setting::Memory::JumpEvent);
+            ImGui::Checkbox("GlowEsp", &Setting::Memory::Glow);
 
             ImGui::EndTabItem();
         }
