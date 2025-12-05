@@ -135,7 +135,8 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp23</LanguageStandard>
-      <AdditionalIncludeDirectories>D:\Sources\CS2_Internal\ImGui-DirectX-11-Kiero-Hook-master\ImGui DirectX 11 Kiero Hook\SDK;D:\Sources\CS2_Internal\ImGui-DirectX-11-Kiero-Hook-master\ImGui DirectX 11 Kiero Hook\Offset;D:\Sources\CS2_Internal\ImGui-DirectX-11-Kiero-Hook-master\ImGui DirectX 11 Kiero Hook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\Admin\Desktop\cs2\CS2_Internal\ImGui DirectX 11 Kiero Hook;D:\Sources\CS2_Internal\ImGui-DirectX-11-Kiero-Hook-master\ImGui DirectX 11 Kiero Hook\SDK;D:\Sources\CS2_Internal\ImGui-DirectX-11-Kiero-Hook-master\ImGui DirectX 11 Kiero Hook\Offset;D:\Sources\CS2_Internal\ImGui-DirectX-11-Kiero-Hook-master\ImGui DirectX 11 Kiero Hook;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -164,6 +165,7 @@
     <ClCompile Include="Menu\Menu.cpp" />
     <ClCompile Include="SDK\SDK.cpp" />
     <ClCompile Include="Setting\Setting.cpp" />
+    <ClCompile Include="Aimbot\Slient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="kiero\minhook\dll_resources\MinHook.def" />
@@ -197,6 +199,7 @@
     <ClInclude Include="Offset\Offset.h" />
     <ClInclude Include="SDK\SDK.h" />
     <ClInclude Include="Setting\Setting.h" />
+    <ClInclude Include="Aimbot\Slient.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

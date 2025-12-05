@@ -11,11 +11,12 @@ namespace Setting
         bool DoanVanSang = false;
         bool Distance = false;
         bool SnapLine = false;
-        ImColor SkeletonColor = ImColor(0, 255, 0, 255);
+        ImColor SkeletonColor = ImColor(255, 0, 0, 255);
+
         float SkeletonThickness = 1.5f;
-        ImColor BoxColor = ImColor(0, 255, 0, 255);
+        ImColor BoxColor = ImColor(255, 0, 0, 255);
         float BoxThickness = 1.0f;
-        ImColor SnapLineColor = ImColor(0, 255, 0, 255);
+        ImColor SnapLineColor = ImColor(255, 0, 0, 255);
     }
     namespace Aimbot
     {
@@ -23,7 +24,7 @@ namespace Setting
         float FOV = 60.0f;
         int VKKey = VK_XBUTTON2; 
         int AimbotIn;//6 = head , 5 = neck , 0 = pelvis
-
+        bool waitingForKey = false;
     }
     namespace Memory
     {

@@ -1,6 +1,6 @@
 ﻿#include <Offset/Offset.h>
 #include <string>
-#include <SDK.h>
+#include <SDK/SDK.h>
 #include <vector>
 
 using namespace std;

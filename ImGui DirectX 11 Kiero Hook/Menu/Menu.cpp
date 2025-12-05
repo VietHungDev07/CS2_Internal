@@ -81,39 +81,58 @@ void SeparatorText(const char* label)
     ImGui::Spacing();
 }
 bool waitingForKey = false;
-const char* GetKeyName(int vk)
+std::string GetKeyName(int vk)
 {
-    static char name[64];
-
     if (vk == 0)
         return "None";
 
-    if (vk == VK_LBUTTON) return "LMB";
-    if (vk == VK_RBUTTON) return "RMB";
-    if (vk == VK_MBUTTON) return "MMB";
+    switch (vk)
+    {
+    case VK_LBUTTON: return "Mouse1";
+    case VK_RBUTTON: return "Mouse2";
+    case VK_MBUTTON: return "Mouse3";
+    case VK_XBUTTON1: return "Mouse4";
+    case VK_XBUTTON2: return "Mouse5";
+    }
 
     if (vk >= 'A' && vk <= 'Z')
+        return std::string(1, char(vk));
+
+    if (vk >= VK_F1 && vk <= VK_F24)
+        return "F" + std::to_string(vk - VK_F1 + 1);
+
+    if (vk >= VK_NUMPAD0 && vk <= VK_NUMPAD9)
+        return "Num" + std::to_string(vk - VK_NUMPAD0);
+
+    if (vk == VK_SHIFT || vk == VK_LSHIFT) return "LShift";
+    if (vk == VK_RSHIFT) return "RShift";
+
+    if (vk == VK_CONTROL || vk == VK_LCONTROL) return "LCtrl";
+    if (vk == VK_RCONTROL) return "RCtrl";
+
+    if (vk == VK_MENU || vk == VK_LMENU) return "LAlt";
+    if (vk == VK_RMENU) return "RAlt";
+
+    if (vk == VK_SPACE) return "Space";
+    if (vk == VK_TAB) return "Tab";
+    if (vk == VK_ESCAPE) return "Escape";
+    if (vk == VK_RETURN) return "Enter";
+    if (vk == VK_BACK) return "Backspace";
+    if (vk == VK_CAPITAL) return "CapsLock";
+
+    char name[64] = {};
+    UINT scan = MapVirtualKeyA(vk, MAPVK_VK_TO_VSC);
+
+    if (scan)
     {
-        sprintf_s(name, "%c", (char)vk);
-        return name;
+        if (GetKeyNameTextA(scan << 16, name, sizeof(name)))
+            return name;
     }
 
-    if (vk >= VK_F1 && vk <= VK_F12)
-    {
-        sprintf_s(name, "F%d", vk - VK_F1 + 1);
-        return name;
-    }
-
-    int scan = MapVirtualKeyA(vk, MAPVK_VK_TO_VSC);
-    if (scan == 0)
-    {
-        sprintf_s(name, "VK_%d", vk);
-        return name;
-    }
-
-    GetKeyNameTextA(scan << 16, name, 64);
-    return name;
+    return "VK_" + std::to_string(vk);
 }
+
+
 
 
 void RenderMenu()
@@ -121,10 +140,9 @@ void RenderMenu()
     ImGui::SetNextWindowSize(ImVec2(200, 325));
     ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoResize);
 
-
     if (ImGui::BeginTabBar("MainTabs", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton))
     {
-
+        
         if (ImGui::BeginTabItem("ESP"))
         {
             currentTab = 0;
@@ -137,55 +155,54 @@ void RenderMenu()
             ImGui::Checkbox("Skeleton", &Setting::ESP::Skeleton);
             ImGui::Checkbox("Distance", &Setting::ESP::Distance);
             ImGui::Checkbox("SnapLine", &Setting::ESP::SnapLine);
+
             ImGui::SameLine();
-            ImGui::ColorEdit4("##SnapLineColor", (float*)&Setting::ESP::SnapLineColor,
+            ImGui::ColorEdit4("##SnapColor", (float*)&Setting::ESP::SnapLineColor,
                 ImGuiColorEditFlags_NoInputs |
-                ImGuiColorEditFlags_PickerHueWheel |
                 ImGuiColorEditFlags_DisplayRGB);
 
             ImGui::Separator();
-            ImGui::Spacing();
-
 
             ImGui::Text("Skeleton Thickness");
-            ImGui::SliderFloat("##SkeletonThickness", &Setting::ESP::SkeletonThickness, 0.1f, 5.0f);
+            ImGui::SliderFloat("##SkThick", &Setting::ESP::SkeletonThickness, 0.1f, 5.0f);
 
             ImGui::Text("Skeleton Color:");
             ImGui::SameLine();
-            ImGui::ColorEdit4("##SkeletonColor", (float*)&Setting::ESP::SkeletonColor,
+            ImGui::ColorEdit4("##SkColor", (float*)&Setting::ESP::SkeletonColor,
                 ImGuiColorEditFlags_NoInputs |
-                ImGuiColorEditFlags_PickerHueWheel |
                 ImGuiColorEditFlags_DisplayRGB);
 
             ImGui::Separator();
-            ImGui::Spacing();
 
             ImGui::Text("Box Thickness");
-            ImGui::SliderFloat("##BoxThickness", &Setting::ESP::BoxThickness, 0.1f, 5.0f);
+            ImGui::SliderFloat("##BoxThick", &Setting::ESP::BoxThickness, 0.1f, 5.0f);
 
             ImGui::Text("Box Color:");
             ImGui::SameLine();
             ImGui::ColorEdit4("##BoxColor", (float*)&Setting::ESP::BoxColor,
                 ImGuiColorEditFlags_NoInputs |
-                ImGuiColorEditFlags_PickerHueWheel |
                 ImGuiColorEditFlags_DisplayRGB);
 
             ImGui::EndTabItem();
         }
 
+        // ------------------ AIMBOT TAB ------------------
         if (ImGui::BeginTabItem("Aimbot"))
         {
             currentTab = 1;
 
             ImGui::Spacing();
             SeparatorText("Aimbot Settings");
+
             ImGui::Checkbox("Aimbot", &Setting::Aimbot::Aimbot);
+
             if (Setting::Aimbot::Aimbot)
             {
                 const char* boneNames[] = { "Head", "Neck", "Pelvis" };
-                int boneValues[] = { 6,      5,      0 };
-                int currentIndex = 0;
-                for (int i = 0; i < IM_ARRAYSIZE(boneValues); i++)
+                int boneValues[] = { 6,     5,      0 };
+
+                int currentIndex = 6;
+                for (int i = 0; i < 3; i++)
                 {
                     if (Setting::Aimbot::AimbotIn == boneValues[i])
                     {
@@ -194,32 +211,30 @@ void RenderMenu()
                     }
                 }
 
-                ImGui::Text("Aim Skeleton:");
-                ImGui::Combo("##AimBone", &currentIndex, boneNames, IM_ARRAYSIZE(boneNames));
-                {
+                ImGui::Text("Aim Bone:");
+                if (ImGui::Combo("##AimBone", &currentIndex, boneNames, 3))
                     Setting::Aimbot::AimbotIn = boneValues[currentIndex];
-                }
+
                 ImGui::Text("Aimbot FOV");
-                ImGui::SliderFloat("##AimbotFOV", &Setting::Aimbot::FOV, 0.1f, 180.0f);
+                ImGui::SliderFloat("##FOV", &Setting::Aimbot::FOV, 0.1f, 180.0f);
 
                 ImGui::Spacing();
 
+                // -------- Keybind ----------
                 ImGui::Text("Aimbot Key:");
                 ImGui::SameLine();
 
-                char btnText[64];
-                sprintf_s(btnText, "[ %s ]", waitingForKey ? "Press key..." : GetKeyName(Setting::Aimbot::VKKey));
-
-                if (ImGui::Button(btnText, ImVec2(120, 25)))
+                std::string btn = "[" + (waitingForKey ? std::string("Press key...") : GetKeyName(Setting::Aimbot::VKKey)) + "]";
+                if (ImGui::Button(btn.c_str(), ImVec2(120, 25)))
                 {
                     waitingForKey = true;
                 }
 
                 if (waitingForKey)
                 {
-                    for (int vk = 1; vk < 256; vk++)
+                    for (int vk = 1; vk <= 255; vk++)
                     {
-                        if (GetAsyncKeyState(vk) & 1)
+                        if (GetAsyncKeyState(vk) & 0x8000)
                         {
                             Setting::Aimbot::VKKey = vk;
                             waitingForKey = false;
@@ -227,19 +242,19 @@ void RenderMenu()
                         }
                     }
                 }
-
-
             }
 
             ImGui::EndTabItem();
         }
+
+       
         if (ImGui::BeginTabItem("Memory"))
         {
-            
             ImGui::Spacing();
             SeparatorText("Memory Settings");
 
-            ImGui::Checkbox("Bunny Hope[SPACE]", &Setting::Memory::JumpEvent);
+            ImGui::Checkbox("Bunny Hop [SPACE]", &Setting::Memory::JumpEvent);
+
             ImGui::EndTabItem();
         }
 

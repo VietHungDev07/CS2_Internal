@@ -3,6 +3,7 @@
 #include <complex>
 #include<Menu/Menu.h>
 #include <Aimbot/Aimbot.h>
+#include "Aimbot/Slient.h"
 #include<Memory/Memory.h>
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 int DATA::windowWidth;
@@ -112,6 +113,7 @@ BOOL WINAPI DllMain(HMODULE hMod, DWORD dwReason, LPVOID lpReserved)
 		InitConsole(); // for debug
 		CreateThread(nullptr, 0, InitMatrix, hMod, 0, nullptr);
 		CreateThread(nullptr, 0, AimbotMain, hMod, 0, nullptr);
+	
 		CreateThread(nullptr, 0, EntryMemory, hMod, 0, nullptr);
 		CreateThread(nullptr, 0, MainThread, hMod, 0, nullptr);
 		break;
