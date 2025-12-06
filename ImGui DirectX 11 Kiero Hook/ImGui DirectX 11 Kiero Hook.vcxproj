@@ -201,6 +201,9 @@
     <ClInclude Include="Setting\Setting.h" />
     <ClInclude Include="Aimbot\Slient.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\Downloads\hitsound.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -14,6 +14,7 @@ namespace Setting
         extern bool SnapLine;
         extern bool TeamCheck;
         extern bool Name;
+        extern bool RainbowGlow;
         extern ImColor SkeletonColor;
         extern float SkeletonThickness;
         extern ImColor BoxColor;
@@ -21,6 +22,7 @@ namespace Setting
         extern bool BoxFilled;
         extern int BoxStyle;
 
+        extern float GlowColor[4];
         extern ImColor SnapLineColor;
     }
     namespace Aimbot
@@ -34,6 +36,7 @@ namespace Setting
     {
         extern bool JumpEvent;
         extern bool Glow;
+        extern bool TriggerBot;
 
     }
 }

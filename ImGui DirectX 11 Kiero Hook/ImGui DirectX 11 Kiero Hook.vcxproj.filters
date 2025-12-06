@@ -193,4 +193,9 @@
       <Filter>kiero</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\Downloads\hitsound.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+  </ItemGroup>
 </Project>

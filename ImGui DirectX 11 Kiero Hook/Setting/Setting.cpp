@@ -1,4 +1,4 @@
-#include "Setting/Setting.h"
+﻿#include "Setting/Setting.h"
 
 namespace Setting
 {
@@ -13,12 +13,15 @@ namespace Setting
         bool SnapLine = false;
         bool TeamCheck = true;
         bool Name = true;
+        bool RainbowGlow = true;
+        
         ImColor SkeletonColor = ImColor(255, 0, 0, 255);
 
         float SkeletonThickness = 1.5f;
         ImColor BoxColor = ImColor(255, 0, 0, 255);
         float BoxThickness = 1.0f;
         ImColor SnapLineColor = ImColor(255, 0, 0, 255);
+        float GlowColor[4] = {0.0f, 0.0f, 1.0f, 1.0f};    
     }
     namespace Aimbot
     {
@@ -32,5 +35,6 @@ namespace Setting
     {
         bool JumpEvent = false;
         bool Glow = true;
+        bool TriggerBot = true;
     }
 }

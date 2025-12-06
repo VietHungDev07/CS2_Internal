@@ -185,6 +185,7 @@ void RenderMenu()
                 ImGuiColorEditFlags_NoInputs |
                 ImGuiColorEditFlags_DisplayRGB);
 
+
             ImGui::EndTabItem();
         }
 
@@ -257,6 +258,9 @@ void RenderMenu()
 
             ImGui::Checkbox("Bunny Hop [SPACE]", &Setting::Memory::JumpEvent);
             ImGui::Checkbox("GlowEsp", &Setting::Memory::Glow);
+            ImGui::Checkbox("Rainbow Glow", &Setting::ESP::RainbowGlow);
+            ImGui::ColorEdit4("Glow Color", Setting::ESP::GlowColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_DisplayRGB);
+            ImGui::Checkbox("Triggerbot", &Setting::Memory::TriggerBot);
 
             ImGui::EndTabItem();
         }
@@ -266,3 +270,4 @@ void RenderMenu()
 
     ImGui::End();
 }
+
