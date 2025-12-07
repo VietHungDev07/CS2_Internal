@@ -11,10 +11,13 @@ namespace Setting
         bool DoanVanSang = false;
         bool Distance = false;
         bool SnapLine = false;
-        bool TeamCheck = true;
-        bool Name = true;
-        bool RainbowGlow = true;
-        
+        bool TeamCheck = false;
+        bool Name = false;
+        bool RainbowGlow = false;
+        bool VisibleCheck = false;
+
+        ImColor VisibleColor = ImColor(255, 0, 0, 255);
+        int GlowMode = 0;
         ImColor SkeletonColor = ImColor(255, 0, 0, 255);
 
         float SkeletonThickness = 1.5f;
@@ -28,13 +31,16 @@ namespace Setting
         bool Aimbot = false;
         float FOV = 60.0f;
         int VKKey = VK_XBUTTON2; 
-        int AimbotIn;//6 = head , 5 = neck , 0 = pelvis
+        int AimbotIn = 6;//6 = head , 5 = neck , 0 = pelvis
         bool waitingForKey = false;
+        bool VisibleCheck = false;
+        bool TriggerBot = false;
+        float TriggerFov = 5.0f;
     }
     namespace Memory
     {
         bool JumpEvent = false;
-        bool Glow = true;
-        bool TriggerBot = true;
+        bool Glow = false;
+     
     }
 }

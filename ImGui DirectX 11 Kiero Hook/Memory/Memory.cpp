@@ -3,29 +3,7 @@
 #include <vector>
 #include <Windows.h>
 #include <unordered_map>
-
 #pragma comment(lib, "winmm.lib")
-
-
-namespace Events
-{
-    void SimulateLMBClick()
-    {
-        INPUT input = { 0 };
-        input.type = INPUT_MOUSE;
-        input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
-        SendInput(1, &input, sizeof(INPUT));
-
-        ZeroMemory(&input, sizeof(INPUT));
-        input.type = INPUT_MOUSE;
-        input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-        SendInput(1, &input, sizeof(INPUT));
-    }
-}
-
-
-
-
 
 void GetRainbowColor(float* outColor)
 {
@@ -78,26 +56,35 @@ void GlowEnemy()
     if (!localController) return;
     uintptr_t localPawn = Entity::GetpCSPlayerPawn("client.dll", localController);
     if (!localPawn) return;
-    int localTeam = *(int*)(localPawn + Offset::m_iTeamNum);
+    int localTeam = UPlayer::GetTeamID(localPawn);
     auto list = Entity::GetListPlayer("client.dll");
     for (auto ent : list)
     {
         if (!ent) continue;
         uintptr_t pawn = Entity::GetpCSPlayerPawn("client.dll", ent);
         if (!pawn || pawn == localPawn) continue;
-        int team = *(int*)(pawn + Offset::m_iTeamNum);
-        if (team == localTeam) continue;
-        int hp = *(int*)(pawn + Offset::m_iHealth);
+        if (Setting::ESP::TeamCheck) 
+        {
+
+            int team = UPlayer::GetTeamID(pawn);
+            if (team == localTeam) continue;
+        }
+        int hp = UPlayer::GetHealth(pawn);
         if (hp <= 0) continue;
         ApplyGlow(pawn);
     }
 }
+
+
+
 
 void BunnyHop()
 {
     uintptr_t localPlayer = Entity::GetLocalPlayer("client.dll");
     if (!localPlayer) return;
     uintptr_t localPawn = Entity::GetpCSPlayerPawn("client.dll", localPlayer);
+
+   // printf("P: %p\n", localPawn);
     if (!localPawn) return;
     bool canJump = *(bool*)(localPawn + Offset::FlagJump);
     if (GetAsyncKeyState(VK_SPACE) && !canJump)
@@ -108,95 +95,20 @@ void BunnyHop()
 
 
 
-float GetDistance2D(const Vector3& a, const Vector3& b);
-
-void Trigger()
-{
-    uintptr_t localPlayer = Entity::GetLocalPlayer("client.dll");
-    if (!localPlayer) return;
-    uintptr_t localPawn = Entity::GetpCSPlayerPawn("client.dll", localPlayer);
-    if (!localPawn) return;
-
-    static int lastIndex = -1;
-
-    int targetIndex = *(int*)(localPawn + Offset::m_iIDEntIndex);
-    printf("Target Index: %d\n", targetIndex);
-
-    if (targetIndex <= 0)
-    {
-        lastIndex = -1;
-        return;
-    }
-
- 
-    bool isAimingAtHead = false;
-
-   
-    if (targetIndex > 0) {
-        int localTeam = UPlayer::GetTeamID(localPawn);
-
-        auto list = Entity::GetListPlayer("client.dll");
-        for (auto ent : list) {
-            if (!ent) continue;
-            uintptr_t pawn = Entity::GetpCSPlayerPawn("client.dll", ent);
-            if (!pawn || pawn == localPawn) continue;
-            if (UPlayer::GetHealth(pawn) <= 0) continue;
-
-           
-            if (Setting::ESP::TeamCheck) {
-                if (UPlayer::GetTeamID(pawn) == localTeam) continue;
-            }
-
-           
-            Vector3 headBone = UPlayer::GetPostionBone(pawn, 6);
-
-         
-            Vector3 screenPos = Camera::WorldToScreen(&headBone);
-
-          
-            if (screenPos.z < 0.1f) continue;
-
-           
-            Vector3 screenCenter = {
-                DATA::windowWidth / 2.0f,
-                DATA::windowHeight / 2.0f,
-                0.0f
-            };
-
-    
-            float dist = GetDistance2D(screenCenter, screenPos);
-
-            if (dist < 5.0f) {  
-                isAimingAtHead = true;
-                break;
-            }
-        }
-    }
-
- 
-    if (isAimingAtHead && targetIndex != lastIndex)
-    {
-        Events::SimulateLMBClick();
-    }
-
-    lastIndex = targetIndex;
-}
-
 
 DWORD WINAPI EntryMemory(LPVOID lp)
 {
     while (true)
     {
         
-        Trigger();
+        
         if (Setting::Memory::JumpEvent)
             BunnyHop();
 
         if (Setting::Memory::Glow)
             GlowEnemy();
 
-    /*   if (Setting::Memory::TriggerBot)
-            TriggerBot();*/
+
 
       
     }

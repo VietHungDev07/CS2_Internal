@@ -1,6 +1,7 @@
 ﻿#include <Draw/Draw.h>
 #include<Setting/Setting.h>
 #include <Offset/Offset.h>
+
 void DrawHealthBar(uintptr_t Pawn)
 {
     int Health = UPlayer::GetHealth(Pawn);
@@ -82,6 +83,9 @@ void DrawHealthBar(uintptr_t Pawn)
 
 void DrawSkeleton(uintptr_t Pawn)
 {
+
+
+
     for (auto& [a, b] : DATA::BoneMap)
     {
         Vector3 w1 = UPlayer::GetPostionBone(Pawn, a);
@@ -94,6 +98,12 @@ void DrawSkeleton(uintptr_t Pawn)
         {
             ImColor skeletonColor = Setting::ESP::SkeletonColor;
             float thickness = Setting::ESP::SkeletonThickness;
+
+            if (Setting::ESP::VisibleCheck == true)
+            {
+               
+
+            }
 
             ImGui::GetForegroundDrawList()->AddLine(
                 ImVec2(s1.x, s1.y),
@@ -147,6 +157,20 @@ void DrawBoxESP(uintptr_t Pawn)
     ImColor color = Setting::ESP::BoxColor;
     float thickness = Setting::ESP::BoxThickness;
 
+    if (Setting::ESP::VisibleCheck == true)
+    {
+       // printf("true, index: %d\n", local_index);
+        uint32_t Spotted = UPlayer::GetSpooted(Pawn);
+        bool isSpotted = (Spotted & (1 << (1 - 1))) != 0;
+        if (isSpotted)
+        {
+         
+            color = Setting::ESP::VisibleColor;
+        }
+
+        
+    }
+
     ImDrawList* draw = ImGui::GetForegroundDrawList();
 
     draw->AddRect(
@@ -183,6 +207,7 @@ void DrawBoxESP(uintptr_t Pawn)
 
 void DrawDistance(uintptr_t Pawn)
 {
+
     Vector3 HeadWorld = UPlayer::GetPostionBone(Pawn, 6);
     Vector3 RootWorld = UPlayer::GetLocaltion(Pawn);
 
@@ -236,7 +261,33 @@ void DrawDistance(uintptr_t Pawn)
     );
 }
 
+void DrawSnapLine(uintptr_t localPawn,uintptr_t pawn)
+{
 
+    Vector3 rootPos = UPlayer::GetLocaltion(pawn);
+    Vector3 screenPos = Camera::WorldToScreen(&rootPos);
+    if (screenPos.z <= 0) return;
+
+    float distance = sqrt(
+        pow(UPlayer::GetLocaltion(localPawn).x - rootPos.x, 2) +
+        pow(UPlayer::GetLocaltion(localPawn).y - rootPos.y, 2) +
+        pow(UPlayer::GetLocaltion(localPawn).z - rootPos.z, 2)
+    );
+
+    if (Setting::ESP::VisibleCheck == true)
+    {
+       
+
+    }
+
+    ImVec2 screenCenter = ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y);
+    ImGui::GetForegroundDrawList()->AddLine(
+        screenCenter,
+        ImVec2(screenPos.x, screenPos.y),
+        Setting::ESP::SnapLineColor,
+        1.0f
+    );
+}
 
 
 void EntryDrawEntity()
@@ -253,7 +304,7 @@ void EntryDrawEntity()
     if (!localPawn) return;
 
     int localTeam = UPlayer::GetTeamID(localPawn);
-
+    int i = 1;
     for (auto& ent : entityList)
     {
 
@@ -263,7 +314,9 @@ void EntryDrawEntity()
         uintptr_t pawn = Entity::GetpCSPlayerPawn("client.dll", ent);
         if (!pawn) continue;
 
-        if (Setting::ESP::TeamCheck) {
+
+        if (Setting::ESP::TeamCheck) 
+        {
 
             int team = UPlayer::GetTeamID(pawn);
             if (team == localTeam) continue;
@@ -273,17 +326,6 @@ void EntryDrawEntity()
 
         int health = UPlayer::GetHealth(pawn);
         if (health <= 0 || health > 200) continue;
-
-
-        Vector3 rootPos = UPlayer::GetLocaltion(pawn);
-        Vector3 screenPos = Camera::WorldToScreen(&rootPos);
-        if (screenPos.z <= 0) continue;
-
-        float distance = sqrt(
-            pow(UPlayer::GetLocaltion(localPawn).x - rootPos.x, 2) +
-            pow(UPlayer::GetLocaltion(localPawn).y - rootPos.y, 2) +
-            pow(UPlayer::GetLocaltion(localPawn).z - rootPos.z, 2)
-        );
 
 
         if (Setting::ESP::BOX)
@@ -306,19 +348,11 @@ void EntryDrawEntity()
             DrawDistance(pawn);
         }
       
-   
-       
-
-
         if (Setting::ESP::SnapLine)
         {
-            ImVec2 screenCenter = ImVec2(ImGui::GetIO().DisplaySize.x / 2, ImGui::GetIO().DisplaySize.y);
-            ImGui::GetForegroundDrawList()->AddLine(
-                screenCenter,
-                ImVec2(screenPos.x, screenPos.y),
-                Setting::ESP::SnapLineColor,
-                1.0f
-            );
+            DrawSnapLine(localPawn,pawn);
         }
+
+      
     }
 }

@@ -21,9 +21,11 @@ namespace Setting
         extern float BoxThickness;
         extern bool BoxFilled;
         extern int BoxStyle;
-
+        extern int GlowMode;
         extern float GlowColor[4];
         extern ImColor SnapLineColor;
+        extern bool VisibleCheck;
+        extern ImColor VisibleColor;
     }
     namespace Aimbot
     {
@@ -31,12 +33,15 @@ namespace Setting
         extern float FOV;
         extern int VKKey;
         extern int AimbotIn;
+        extern bool VisibleCheck;
+        extern bool TriggerBot;
+        extern float TriggerFov;
     }
     namespace Memory
     {
         extern bool JumpEvent;
         extern bool Glow;
-        extern bool TriggerBot;
+ 
 
     }
 }

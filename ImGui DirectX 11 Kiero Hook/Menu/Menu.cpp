@@ -1,6 +1,6 @@
 ﻿#include<Menu/Menu.h>
 
-static int currentTab = 0; // 0 = ESP, 1 = Aimbot
+
 
 
 ImFont* arialFont;
@@ -137,7 +137,7 @@ std::string GetKeyName(int vk)
 
 void RenderMenu()
 {
-    ImGui::SetNextWindowSize(ImVec2(200, 325));
+    ImGui::SetNextWindowSize(ImVec2(200, 350));
     ImGui::Begin("Menu", nullptr, ImGuiWindowFlags_NoResize);
 
     if (ImGui::BeginTabBar("MainTabs", ImGuiTabBarFlags_NoCloseWithMiddleMouseButton))
@@ -145,7 +145,6 @@ void RenderMenu()
         
         if (ImGui::BeginTabItem("ESP"))
         {
-            currentTab = 0;
 
             ImGui::Spacing();
             SeparatorText("ESP Settings");
@@ -156,6 +155,7 @@ void RenderMenu()
             ImGui::Checkbox("Skeleton", &Setting::ESP::Skeleton);
             ImGui::Checkbox("Distance", &Setting::ESP::Distance);
             ImGui::Checkbox("SnapLine", &Setting::ESP::SnapLine);
+          
       
 
             ImGui::SameLine();
@@ -163,6 +163,12 @@ void RenderMenu()
                 ImGuiColorEditFlags_NoInputs |
                 ImGuiColorEditFlags_DisplayRGB);
 
+            ImGui::Checkbox("Visible Check", &Setting::ESP::VisibleCheck);
+
+            ImGui::SameLine();
+            ImGui::ColorEdit4("##VisibleColor", (float*)&Setting::ESP::VisibleColor,
+                ImGuiColorEditFlags_NoInputs |
+                ImGuiColorEditFlags_DisplayRGB);
             ImGui::Separator();
 
             ImGui::Text("Skeleton Thickness");
@@ -192,8 +198,7 @@ void RenderMenu()
         // ------------------ AIMBOT TAB ------------------
         if (ImGui::BeginTabItem("Aimbot"))
         {
-            currentTab = 1;
-
+           
             ImGui::Spacing();
             SeparatorText("Aimbot Settings");
 
@@ -220,7 +225,6 @@ void RenderMenu()
 
                 ImGui::Text("Aimbot FOV");
                 ImGui::SliderFloat("##FOV", &Setting::Aimbot::FOV, 0.1f, 180.0f);
-
                 ImGui::Spacing();
 
                 // -------- Keybind ----------
@@ -246,7 +250,13 @@ void RenderMenu()
                     }
                 }
             }
-
+            ImGui::Checkbox("Triggerbot", &Setting::Aimbot::TriggerBot);
+            if (Setting::Aimbot::TriggerBot)
+            {
+                ImGui::Text("Trigger FOV");
+                ImGui::SameLine();
+                ImGui::SliderFloat("##FOVTriger", &Setting::Aimbot::TriggerFov, 5.0f, 10.0f);
+            }
             ImGui::EndTabItem();
         }
 
@@ -257,10 +267,33 @@ void RenderMenu()
             SeparatorText("Memory Settings");
 
             ImGui::Checkbox("Bunny Hop [SPACE]", &Setting::Memory::JumpEvent);
-            ImGui::Checkbox("GlowEsp", &Setting::Memory::Glow);
-            ImGui::Checkbox("Rainbow Glow", &Setting::ESP::RainbowGlow);
-            ImGui::ColorEdit4("Glow Color", Setting::ESP::GlowColor, ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_DisplayRGB);
-            ImGui::Checkbox("Triggerbot", &Setting::Memory::TriggerBot);
+
+                const char* modes[] = { "Disable Glow", "Glow Color", "Glow Rainbow"};
+                ImGui::Combo("##GlowOption", &Setting::ESP::GlowMode, modes, IM_ARRAYSIZE(modes));
+
+                if (Setting::ESP::GlowMode == 0)
+                {
+                    Setting::Memory::Glow = false;
+                    Setting::ESP::RainbowGlow = false;
+                }
+                else if(Setting::ESP::GlowMode == 1)
+                {
+                    Setting::Memory::Glow = true;
+                    Setting::ESP::RainbowGlow = false;
+                    ImGui::SameLine();
+                    ImGui::ColorEdit4("Glow Color", Setting::ESP::GlowColor,
+                        ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_DisplayRGB);
+                }
+                else
+                {
+                    Setting::Memory::Glow = true;
+                    Setting::ESP::RainbowGlow = true;
+                }
+            
+
+
+
+
 
             ImGui::EndTabItem();
         }

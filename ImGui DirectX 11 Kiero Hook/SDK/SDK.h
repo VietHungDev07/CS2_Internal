@@ -129,6 +129,7 @@ namespace UPlayer
 	uintptr_t GetBoneArray(uintptr_t Pawn);
 	Vector3 GetPostionBone(uintptr_t Pawn, int BoneIndex);
 	std::string GetPlayerName(uintptr_t Pawn);
+	uint32_t GetSpooted(uintptr_t Pawn);
 }
 
 namespace Entity

@@ -1,5 +1,5 @@
 ﻿#include <Aimbot/Aimbot.h>
-
+#include<Offset/Offset.h>
 float GetDistance2D(const Vector3& a, const Vector3& b)
 {
     return sqrtf((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
@@ -19,7 +19,99 @@ Vector3 CalAngel(Vector3 myself, Vector3 enemy) {
     return a;
 }
 
-DWORD WINAPI AimbotMain(LPVOID)
+DWORD WINAPI Trigger(LPVOID)
+{
+    while (true)
+    {
+        if (!Setting::Aimbot::TriggerBot)
+        {
+            Sleep(1);
+            continue;
+        }
+
+
+            uintptr_t localPlayer = Entity::GetLocalPlayer("client.dll");
+        if (!localPlayer) continue;
+        uintptr_t localPawn = Entity::GetpCSPlayerPawn("client.dll", localPlayer);
+        if (!localPawn) continue;
+
+        static int lastIndex = -1;
+
+        int targetIndex = *(int*)(localPawn + Offset::m_iIDEntIndex);
+
+        if (targetIndex <= 0)
+        {
+            lastIndex = -1;
+            continue;
+        }
+
+
+        bool isAimingAtHead = false;
+
+
+        if (targetIndex > 0)
+        {
+            int localTeam = UPlayer::GetTeamID(localPawn);
+
+            auto list = Entity::GetListPlayer("client.dll");
+            for (auto ent : list)
+            {
+                if (!ent) continue;
+                uintptr_t pawn = Entity::GetpCSPlayerPawn("client.dll", ent);
+                if (!pawn || pawn == localPawn) continue;
+                if (UPlayer::GetHealth(pawn) <= 0) continue;
+
+
+                if (Setting::ESP::TeamCheck) {
+                    if (UPlayer::GetTeamID(pawn) == localTeam) continue;
+                }
+
+
+                Vector3 headBone = UPlayer::GetPostionBone(pawn, Setting::Aimbot::AimbotIn);
+
+
+                Vector3 screenPos = Camera::WorldToScreen(&headBone);
+
+
+                if (screenPos.z < 0.1f) continue;
+
+
+                Vector3 screenCenter = {
+                    DATA::windowWidth / 2.0f,
+                    DATA::windowHeight / 2.0f,
+                    0.0f
+                };
+
+
+                float dist = GetDistance2D(screenCenter, screenPos);
+
+                if (dist < Setting::Aimbot::TriggerFov)
+                {
+                    isAimingAtHead = true;
+                    break;
+                }
+            }
+        }
+
+        if (isAimingAtHead && targetIndex != lastIndex)
+        {
+
+            INPUT input = { 0 };
+            input.type = INPUT_MOUSE;
+            input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
+            SendInput(1, &input, sizeof(INPUT));
+
+            ZeroMemory(&input, sizeof(INPUT));
+            input.type = INPUT_MOUSE;
+            input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
+            SendInput(1, &input, sizeof(INPUT));
+
+
+        }
+        lastIndex = targetIndex;
+    }
+}
+DWORD WINAPI Aimbot(LPVOID)
 {
     while (true)
     {
@@ -58,7 +150,7 @@ DWORD WINAPI AimbotMain(LPVOID)
             Vector3 worldBone = UPlayer::GetPostionBone(pawn, Setting::Aimbot::AimbotIn);
 
             Vector3 s = Camera::WorldToScreen(&worldBone);
-            if (s.z < 0.1f) continue; 
+            if (s.z < 0.1f) continue;
 
             Vector3 screenCenter =
             {
@@ -94,5 +186,18 @@ DWORD WINAPI AimbotMain(LPVOID)
 
         Sleep(1);
     }
-    return 0;
+    
+
+}
+DWORD WINAPI AimbotMain(LPVOID)
+{
+   
+    
+     CreateThread(nullptr, 0, Aimbot, 0, 0, nullptr);
+    
+
+    
+     CreateThread(nullptr, 0, Trigger, 0, 0, nullptr);
+    
+     return 1;
 }

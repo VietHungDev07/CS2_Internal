@@ -123,6 +123,7 @@ namespace Camera
         return LastClipCameraPos;
     }
 
+
 }
 
 namespace UPlayer
@@ -164,6 +165,17 @@ namespace UPlayer
         SafeRead::Read(GetBoneArray(Pawn) + BoneIndex * 32, bonePosition);
         return bonePosition;
     }
+
+    uint32_t GetSpooted(uintptr_t Pawn)
+    {
+        uintptr_t entitySpottedState;
+        SafeRead::Read(Pawn + Offset::m_entitySpottedState, entitySpottedState);
+        uint32_t Spotted;
+        SafeRead::Read(entitySpottedState + Offset::m_bSpottedByMask, Spotted);
+        return Spotted;
+
+    }
+
 
 
 }
@@ -248,10 +260,12 @@ namespace Entity
             if (!SafeRead::Read(list_entry + 112 * idx1, entity))
                 continue;
 
+
             if (entity)
                 EntityList.push_back(entity);
         }
 
         return EntityList;
     }
+
 }

@@ -99,9 +99,6 @@
     <ClCompile Include="Memory\Memory.cpp">
       <Filter>Memory</Filter>
     </ClCompile>
-    <ClCompile Include="Aimbot\Slient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="kiero\minhook\dll_resources\MinHook.rc">
@@ -183,9 +180,6 @@
     </ClInclude>
     <ClInclude Include="Memory\Memory.h">
       <Filter>Memory</Filter>
-    </ClInclude>
-    <ClInclude Include="Aimbot\Slient.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
